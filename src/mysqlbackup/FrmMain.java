@@ -2,9 +2,11 @@ package mysqlbackup;
 
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.logging.Level;
@@ -27,6 +29,7 @@ public class FrmMain extends javax.swing.JFrame {
     String divider="/";
     String username="root";
     String password="password";
+    String database="tmcprogram3";
     /**
      * Creates new form FrmMain
      */
@@ -44,7 +47,6 @@ public class FrmMain extends javax.swing.JFrame {
             if(!binfile.exists())
             {
                 //choose bin file
-                System.out.println(1);
                 chooseBinFile();
             }
             else
@@ -55,7 +57,6 @@ public class FrmMain extends javax.swing.JFrame {
         else
         {
             //choose bin file
-            System.out.println(2);
             chooseBinFile();
         }
         
@@ -147,7 +148,6 @@ public class FrmMain extends javax.swing.JFrame {
 
         //ask for output file
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        System.out.print(sdf.format(new Date()));
         JFileChooser fc = new JFileChooser();
         fc.setSelectedFile(new File("tmcbackup-"+sdf.format(new Date())+".sql"));
         fc.setDialogTitle("Save database backup file as ...");
@@ -155,7 +155,7 @@ public class FrmMain extends javax.swing.JFrame {
         int rVal = fc.showSaveDialog(this);
         
         String backupfilename="";
-        String backupcontent="";
+        //String backupcontent="";
         
         if (rVal == JFileChooser.APPROVE_OPTION) {
             backupfilename=fc.getCurrentDirectory().toString()+divider+fc.getSelectedFile().getName();
@@ -166,7 +166,7 @@ public class FrmMain extends javax.swing.JFrame {
         }        
         
         try {        
-            String command=filename+" --user="+username+" --password="+password+" tmcprogram3 ";
+            String command=filename+" --user="+username+" --password="+password+" "+database;
             //System.out.println(command);
             Runtime rt = Runtime.getRuntime();
             Process pr = rt.exec(command);
@@ -175,12 +175,23 @@ public class FrmMain extends javax.swing.JFrame {
 
             String line=null;
 
-            while((line=input.readLine()) != null) {
-                //System.out.println(line);
-                backupcontent+=line;
-            }
+            try {
+                PrintWriter out = new PrintWriter(new BufferedWriter(new java.io.FileWriter(backupfilename, true)));
+                while((line=input.readLine()) != null) {
+                    //System.out.println(line);
+//                    backupcontent+=line;
+                    out.println(line);
+                }
+                out.close();
+
+                
+            } catch (IOException e) {
+                //exception handling left as an exercise for the reader
+                e.printStackTrace();
+            }        
             
-            FileWriter.write(backupfilename, backupcontent);
+            
+            //FileWriter.write(backupfilename, backupcontent);
 
             int exitVal = pr.waitFor();
             System.out.println("Exited with error code "+exitVal);
