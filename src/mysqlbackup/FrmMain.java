@@ -38,25 +38,27 @@ public class FrmMain extends javax.swing.JFrame {
         }
         else
         {
-            JFileChooser c = new JFileChooser();
-            //c.setName("Please locate the file mysqldump in your computer");
+            JFileChooser fc = new JFileChooser();
+            fc.setDialogTitle("Please locate the file mysqldump in your computer");
             // Demonstrate "Open" dialog:
-            int rVal = c.showOpenDialog(this);
+            int rVal = fc.showOpenDialog(this);
             if (rVal == JFileChooser.APPROVE_OPTION) {
-                if(c.getSelectedFile().getName().contains("mysqldump"))
+                if(fc.getSelectedFile().getName().contains("mysqldump"))
                 {
-                    txtMysqlBinPath.setText(c.getCurrentDirectory().toString());
+                    txtMysqlBinPath.setText(fc.getCurrentDirectory().toString());
                     FileWriter.write("."+divider+"mysqlbinpath.txt", txtMysqlBinPath.getText());
                 }
                 else
                 {
-                    JOptionPane.showMessageDialog(this, "this is not mysqldump, please try again");
+                    JOptionPane.showMessageDialog(this, "this is not mysqldump, exiting");
+                    System.exit(0);
                 }
 //                System.out.println(c.getSelectedFile().getName());
 //                System.out.println(c.getCurrentDirectory().toString());
             }
-            if (rVal == JFileChooser.CANCEL_OPTION) {
-                //JOptionPane.showMessageDialog(this, "mysqldump not found, exiting");
+            else if (rVal == JFileChooser.CANCEL_OPTION) {
+                JOptionPane.showMessageDialog(this, "mysqldump not found, exiting");
+                System.exit(0);
             }
         }
         
@@ -78,6 +80,7 @@ public class FrmMain extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
+        txtMysqlBinPath.setEditable(false);
         txtMysqlBinPath.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtMysqlBinPathActionPerformed(evt);
@@ -153,7 +156,29 @@ public class FrmMain extends javax.swing.JFrame {
             return;
         }
 
-        FileWriter.write("."+divider+"mysqlbinpath.txt", txtMysqlBinPath.getText());
+        //FileWriter.write("."+divider+"mysqlbinpath.txt", txtMysqlBinPath.getText());
+        
+        //ask for output file
+        JFileChooser fc = new JFileChooser();
+        //c.setName("Please locate the file mysqldump in your computer");
+        // Demonstrate "Open" dialog:
+        int rVal = fc.showSaveDialog(this);
+        if (rVal == JFileChooser.APPROVE_OPTION) {
+            if(fc.getSelectedFile().getName().contains("mysqldump"))
+            {
+                txtMysqlBinPath.setText(fc.getCurrentDirectory().toString());
+                FileWriter.write("."+divider+"mysqlbinpath.txt", txtMysqlBinPath.getText());
+            }
+            else
+            {
+                JOptionPane.showMessageDialog(this, "this is not mysqldump, please try again");
+            }
+//                System.out.println(c.getSelectedFile().getName());
+//                System.out.println(c.getCurrentDirectory().toString());
+        }
+        if (rVal == JFileChooser.CANCEL_OPTION) {
+            //JOptionPane.showMessageDialog(this, "mysqldump not found, exiting");
+        }        
         
         try {        
             Runtime rt = Runtime.getRuntime();
