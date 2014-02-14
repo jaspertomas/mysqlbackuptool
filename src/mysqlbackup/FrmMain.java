@@ -251,6 +251,7 @@ public class FrmMain extends javax.swing.JFrame {
 
     private void btnLoadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoadActionPerformed
         String mysqlfilename=getMysqlFile();
+        String mysqldumpfilename=txtMysqldump.getText();
 
         //ask for output file
         //SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -278,44 +279,75 @@ public class FrmMain extends javax.swing.JFrame {
             Process pr;
             int exitVal;
             
+            //--------------------drop and recreate tables via mysqldump---------------------
+            // mysqldump -u[USERNAME] -p[PASSWORD] --add-drop-table --no-data [DATABASE] | grep -e '^DROP \| FOREIGN_KEY_CHECKS' | mysql -u[USERNAME] -p[PASSWORD] [DATABASE]
+//            command=mysqldumpfilename+" -u"+username+" -p"+password+"  --add-drop-table --no-data "+database+" > temp";
+//            System.out.println(command);
+//            rt = Runtime.getRuntime();
+//            pr = rt.exec(command);
+//            exitVal = pr.waitFor();
+//            if(exitVal!=0)
+//            {
+//                JOptionPane.showMessageDialog(this, "1 Exited with error code "+exitVal);
+//                System.exit(exitVal);
+//            }
+//            
+//            //+
+//            command=mysqlfilename+" -u"+username+" -p"+password+" "+database+" < temp";
+//            System.out.println(command);
+//            rt = Runtime.getRuntime();
+//            pr = rt.exec(command);
+//            exitVal = pr.waitFor();
+//            if(exitVal!=0)
+//            {
+//                JOptionPane.showMessageDialog(this, "1.5 Exited with error code "+exitVal);
+//                System.exit(exitVal);
+//            }
+            //-----------------END---drop and recreate tables via mysqldump---------------------
+
             //--------------------drop database---------------------
             // mysql -uroot -ppassword -e "drop database clix;" 
-            command=mysqlfilename+" -u"+username+" -p"+password+" -e \"drop database "+database+"\"";
+            command=mysqlfilename+"admin -u"+username+" -p"+password+" -f drop "+database+"";
+            System.out.println(command);
             rt = Runtime.getRuntime();
             pr = rt.exec(command);
             exitVal = pr.waitFor();
             if(exitVal!=0)
             {
-                JOptionPane.showMessageDialog(this, "Exited with error code "+exitVal);
-                System.exit(exitVal);
+                JOptionPane.showMessageDialog(this, "1 Exited with error code "+exitVal);
+                //System.exit(exitVal);
             }
             
             //--------------------recreate database---------------------
             //mysql -uroot -ppassword -e "create database clix;"
-            command=mysqlfilename+" -u"+username+" -p"+password+" -e \"create database "+database+"\"";
+            //command=mysqlfilename+" -u"+username+" -p"+password+" -e \"create database "+database+"\"";
+            command=mysqlfilename+"admin -u"+username+" -p"+password+" -f create "+database+"";
+            System.out.println(command);
             rt = Runtime.getRuntime();
             pr = rt.exec(command);
             exitVal = pr.waitFor();
             if(exitVal!=0)
             {
-                JOptionPane.showMessageDialog(this, "Exited with error code "+exitVal);
+                JOptionPane.showMessageDialog(this, "2 Exited with error code "+exitVal);
                 System.exit(exitVal);
             }
             
             //--------------------load database from backup file---------------------
             //mysql -uroot -ppassword clix < ~/tmcbackup-2014-02-13.sql 
             command=mysqlfilename+" -u"+username+" -p"+password+" "+database+" < "+loadfilename;
+            System.out.println(command);
             //System.out.println(command);
             rt = Runtime.getRuntime();
             pr = rt.exec(command);
             exitVal = pr.waitFor();
             if(exitVal!=0)
             {
-                JOptionPane.showMessageDialog(this, "Exited with error code "+exitVal);
+                JOptionPane.showMessageDialog(this, "3 Exited with error code "+exitVal);
                 System.exit(exitVal);
             }
 
             command=mysqlfilename+" -u"+username+" -p"+password+" "+database;
+            System.out.println(command);
             //System.out.println(command);
             rt = Runtime.getRuntime();
             pr = rt.exec(command);
