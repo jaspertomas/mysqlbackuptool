@@ -26,10 +26,20 @@ import utils.fileaccess.FileWriter;
  * @author jaspertomas
  */
 public class FrmMain extends javax.swing.JFrame {
+    //*
+    //for prod
+    String divider="\\";
+    String username="root";
+    String password="happiness";
+    String database="tmcprogram3";
+    //*/
+    /*
+    //for dev
     String divider="/";
     String username="root";
     String password="password";
     String database="tmcprogram3";
+    //*/ 
     /**
      * Creates new form FrmMain
      */
@@ -40,9 +50,9 @@ public class FrmMain extends javax.swing.JFrame {
         File settingsfile=new File("."+divider+"mysqlbinpath.txt");
         if(settingsfile.exists())
         {
-            String mysqlbinpath=FileReader.read("."+divider+"mysqlbinpath.txt");
-            mysqlbinpath=mysqlbinpath.replace("\n", "");
-            File binfile=new File(mysqlbinpath+divider+"mysqldump");
+            String mysqldump=FileReader.read("."+divider+"mysqlbinpath.txt");
+            mysqldump=mysqldump.replace("\n", "");
+            File binfile=new File(mysqldump);
 
             if(!binfile.exists())
             {
@@ -51,7 +61,7 @@ public class FrmMain extends javax.swing.JFrame {
             }
             else
             {
-                txtMysqlBinPath.setText(mysqlbinpath);
+                txtMysqldump.setText(mysqldump);
             }
         }
         else
@@ -71,17 +81,17 @@ public class FrmMain extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        txtMysqlBinPath = new javax.swing.JTextField();
+        txtMysqldump = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         btnBackup = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        txtMysqlBinPath.setEditable(false);
-        txtMysqlBinPath.addActionListener(new java.awt.event.ActionListener() {
+        txtMysqldump.setEditable(false);
+        txtMysqldump.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtMysqlBinPathActionPerformed(evt);
+                txtMysqldumpActionPerformed(evt);
             }
         });
 
@@ -107,7 +117,7 @@ public class FrmMain extends javax.swing.JFrame {
                     .add(layout.createSequentialGroup()
                         .addContainerGap()
                         .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                            .add(txtMysqlBinPath, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 345, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                            .add(txtMysqldump, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 345, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                             .add(layout.createSequentialGroup()
                                 .add(83, 83, 83)
                                 .add(jLabel2))
@@ -127,7 +137,7 @@ public class FrmMain extends javax.swing.JFrame {
                 .add(42, 42, 42)
                 .add(jLabel2)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(txtMysqlBinPath, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .add(txtMysqldump, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
                 .add(btnBackup, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 46, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(29, Short.MAX_VALUE))
@@ -143,7 +153,7 @@ public class FrmMain extends javax.swing.JFrame {
 //            return;
 //        }
         
-        String filename=txtMysqlBinPath.getText()+divider+"mysqldump";
+        String filename=txtMysqldump.getText();
         filename=filename.replace(divider+divider, divider);
 
         //ask for output file
@@ -202,9 +212,9 @@ public class FrmMain extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnBackupActionPerformed
 
-    private void txtMysqlBinPathActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtMysqlBinPathActionPerformed
+    private void txtMysqldumpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtMysqldumpActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtMysqlBinPathActionPerformed
+    }//GEN-LAST:event_txtMysqldumpActionPerformed
 
     /**
      * @param args the command line arguments
@@ -249,8 +259,8 @@ public class FrmMain extends javax.swing.JFrame {
         if (rVal == JFileChooser.APPROVE_OPTION) {
             if(fc.getSelectedFile().getName().contains("mysqldump"))
             {
-                txtMysqlBinPath.setText(fc.getCurrentDirectory().toString());
-                FileWriter.write("."+divider+"mysqlbinpath.txt", txtMysqlBinPath.getText());
+                txtMysqldump.setText(fc.getCurrentDirectory().toString()+divider+fc.getSelectedFile().getName());
+                FileWriter.write("."+divider+"mysqlbinpath.txt", txtMysqldump.getText());
             }
             else
             {
@@ -271,6 +281,6 @@ public class FrmMain extends javax.swing.JFrame {
     private javax.swing.JButton btnBackup;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JTextField txtMysqlBinPath;
+    private javax.swing.JTextField txtMysqldump;
     // End of variables declaration//GEN-END:variables
 }
