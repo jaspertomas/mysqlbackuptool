@@ -335,10 +335,14 @@ public class FrmMain extends javax.swing.JFrame {
             //--------------------load database from backup file---------------------
             //mysql -uroot -ppassword clix < ~/tmcbackup-2014-02-13.sql 
             command=mysqlfilename+" -u"+username+" -p"+password+" "+database+" < "+loadfilename;
-            System.out.println(command);
+
+            String[] cmds = {"/bin/sh", "-c", command };
+//            Process ps = Runtime.getRuntime().exec(cmds);
+ 
+            //System.out.println(command);
             //System.out.println(command);
             rt = Runtime.getRuntime();
-            pr = rt.exec(command);
+            pr = rt.exec(cmds);
             exitVal = pr.waitFor();
             if(exitVal!=0)
             {
@@ -346,12 +350,12 @@ public class FrmMain extends javax.swing.JFrame {
                 System.exit(exitVal);
             }
 
-            command=mysqlfilename+" -u"+username+" -p"+password+" "+database;
-            System.out.println(command);
-            //System.out.println(command);
-            rt = Runtime.getRuntime();
-            pr = rt.exec(command);
-            exitVal = pr.waitFor();
+//            command=mysqlfilename+" -u"+username+" -p"+password+" "+database;
+//            System.out.println(command);
+//            //System.out.println(command);
+//            rt = Runtime.getRuntime();
+//            pr = rt.exec(command);
+//            exitVal = pr.waitFor();
  
             System.out.println("Exited with error code "+exitVal);
         } catch (InterruptedException ex) {
