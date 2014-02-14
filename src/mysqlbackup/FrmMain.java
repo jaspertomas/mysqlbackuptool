@@ -26,14 +26,14 @@ import utils.fileaccess.FileWriter;
  * @author jaspertomas
  */
 public class FrmMain extends javax.swing.JFrame {
-    /*
+    //*
     //for prod
     String divider="\\";
     String username="root";
     String password="happiness";
     String database="tmcprogram3";
     //*/
-    //*
+    /*
     //for dev
     String divider="/";
     String username="root";
@@ -307,7 +307,7 @@ public class FrmMain extends javax.swing.JFrame {
 
             //--------------------drop database---------------------
             // mysql -uroot -ppassword -e "drop database clix;" 
-            command=mysqlfilename+"admin -u"+username+" -p"+password+" -f drop "+database+"";
+            command=mysqldumpfilename.replace("dump", "admin") +" -u"+username+" -p"+password+" -f drop "+database+"";
             System.out.println(command);
             rt = Runtime.getRuntime();
             pr = rt.exec(command);
@@ -321,7 +321,7 @@ public class FrmMain extends javax.swing.JFrame {
             //--------------------recreate database---------------------
             //mysql -uroot -ppassword -e "create database clix;"
             //command=mysqlfilename+" -u"+username+" -p"+password+" -e \"create database "+database+"\"";
-            command=mysqlfilename+"admin -u"+username+" -p"+password+" -f create "+database+"";
+            command=mysqldumpfilename.replace("dump", "admin")+" -u"+username+" -p"+password+" -f create "+database+"";
             System.out.println(command);
             rt = Runtime.getRuntime();
             pr = rt.exec(command);
@@ -334,21 +334,20 @@ public class FrmMain extends javax.swing.JFrame {
             
             //--------------------load database from backup file---------------------
             //mysql -uroot -ppassword clix < ~/tmcbackup-2014-02-13.sql 
-            command=mysqlfilename+" -u"+username+" -p"+password+" "+database+" < "+loadfilename;
+            command="cmd /c "+mysqlfilename+" -u"+username+" -p"+password+" "+database+" < "+loadfilename;
+            System.out.println(command);
 
-            String[] cmds = {"/bin/sh", "-c", command };
-//            Process ps = Runtime.getRuntime().exec(cmds);
- 
-            //System.out.println(command);
-            //System.out.println(command);
+            //String[] cmds = {"/bin/sh", "-c", command };
             rt = Runtime.getRuntime();
-            pr = rt.exec(cmds);
+            //pr = rt.exec(cmds);
+            pr = rt.exec(command);
             exitVal = pr.waitFor();
             if(exitVal!=0)
             {
                 JOptionPane.showMessageDialog(this, "3 Exited with error code "+exitVal);
                 System.exit(exitVal);
             }
+            JOptionPane.showMessageDialog(this, "Database "+database+" successfully reloaded");
 
 //            command=mysqlfilename+" -u"+username+" -p"+password+" "+database;
 //            System.out.println(command);
