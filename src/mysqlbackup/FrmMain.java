@@ -26,19 +26,20 @@ import utils.fileaccess.FileWriter;
  * @author jaspertomas
  */
 public class FrmMain extends javax.swing.JFrame {
-    //*
+    /*
     //for prod
     String divider="\\";
     String username="root";
     String password="happiness";
     String database="tmcprogram3";
     //*/
-    /*
+    //*
     //for dev
     String divider="/";
     String username="root";
     String password="password";
-    String database="tmcprogram3";
+    String database="clix";
+    //String database="tmcprogram3";
     //*/ 
     /**
      * Creates new form FrmMain
@@ -52,9 +53,16 @@ public class FrmMain extends javax.swing.JFrame {
         {
             String mysqldump=FileReader.read("."+divider+"mysqlbinpath.txt");
             mysqldump=mysqldump.replace("\n", "");
-            File binfile=new File(mysqldump);
+            System.out.println(mysqldump);
+            File mysqldumpfile=new File(mysqldump);
+            File mysqlfile=new File(mysqldump.replace("dump", ""));
 
-            if(!binfile.exists())
+            if(!mysqldumpfile.exists())
+            {
+                //choose bin file
+                chooseBinFile();
+            }
+            else if(!mysqlfile.exists())
             {
                 //choose bin file
                 chooseBinFile();
@@ -67,6 +75,7 @@ public class FrmMain extends javax.swing.JFrame {
         else
         {
             //choose bin file
+            System.out.println("Settings file not found");
             chooseBinFile();
         }
         
@@ -85,6 +94,8 @@ public class FrmMain extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         btnBackup = new javax.swing.JButton();
+        btnLoad = new javax.swing.JButton();
+        btnExit = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -101,10 +112,24 @@ public class FrmMain extends javax.swing.JFrame {
         jLabel2.setFont(new java.awt.Font("Lucida Grande", 0, 14)); // NOI18N
         jLabel2.setText("Path to Mysql binary files:");
 
-        btnBackup.setText("Backup");
+        btnBackup.setText("Save database as file");
         btnBackup.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnBackupActionPerformed(evt);
+            }
+        });
+
+        btnLoad.setText("Load database from file");
+        btnLoad.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLoadActionPerformed(evt);
+            }
+        });
+
+        btnExit.setText("Exit");
+        btnExit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnExitActionPerformed(evt);
             }
         });
 
@@ -120,13 +145,18 @@ public class FrmMain extends javax.swing.JFrame {
                             .add(txtMysqldump, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 345, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                             .add(layout.createSequentialGroup()
                                 .add(83, 83, 83)
-                                .add(jLabel2))
-                            .add(layout.createSequentialGroup()
-                                .add(116, 116, 116)
-                                .add(btnBackup, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 115, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))))
+                                .add(jLabel2))))
                     .add(layout.createSequentialGroup()
                         .add(56, 56, 56)
-                        .add(jLabel1)))
+                        .add(jLabel1))
+                    .add(layout.createSequentialGroup()
+                        .add(85, 85, 85)
+                        .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING, false)
+                            .add(btnBackup, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .add(btnLoad, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .add(layout.createSequentialGroup()
+                        .add(109, 109, 109)
+                        .add(btnExit, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 115, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -138,9 +168,13 @@ public class FrmMain extends javax.swing.JFrame {
                 .add(jLabel2)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(txtMysqldump, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(btnBackup, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 46, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(29, Short.MAX_VALUE))
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(btnLoad, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 46, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .add(12, 12, 12)
+                .add(btnExit, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 46, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(38, Short.MAX_VALUE))
         );
 
         pack();
@@ -153,13 +187,12 @@ public class FrmMain extends javax.swing.JFrame {
 //            return;
 //        }
         
-        String filename=txtMysqldump.getText();
-        filename=filename.replace(divider+divider, divider);
+        String mysqldebugfilename=txtMysqldump.getText();
 
         //ask for output file
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         JFileChooser fc = new JFileChooser();
-        fc.setSelectedFile(new File("tmcbackup-"+sdf.format(new Date())+".sql"));
+        fc.setSelectedFile(new File("."+divider+"tmcbackup-"+sdf.format(new Date())+".sql"));
         fc.setDialogTitle("Save database backup file as ...");
         // Demonstrate "Open" dialog:
         int rVal = fc.showSaveDialog(this);
@@ -176,7 +209,7 @@ public class FrmMain extends javax.swing.JFrame {
         }        
         
         try {        
-            String command=filename+" --user="+username+" --password="+password+" "+database;
+            String command=mysqldebugfilename+" --user="+username+" --password="+password+" "+database;
             //System.out.println(command);
             Runtime rt = Runtime.getRuntime();
             Process pr = rt.exec(command);
@@ -213,8 +246,92 @@ public class FrmMain extends javax.swing.JFrame {
     }//GEN-LAST:event_btnBackupActionPerformed
 
     private void txtMysqldumpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtMysqldumpActionPerformed
-        // TODO add your handling code here:
+
     }//GEN-LAST:event_txtMysqldumpActionPerformed
+
+    private void btnLoadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoadActionPerformed
+        String mysqlfilename=getMysqlFile();
+
+        //ask for output file
+        //SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        JFileChooser fc = new JFileChooser();
+        fc.setSelectedFile(new File("."+divider+"*.sql"));
+        fc.setDialogTitle("Load database backup file ...");
+        // Demonstrate "Open" dialog:
+        int rVal = fc.showOpenDialog(this);
+        
+        String loadfilename="";
+        //String backupcontent="";
+        
+        if (rVal == JFileChooser.APPROVE_OPTION) {
+            loadfilename=fc.getCurrentDirectory().toString()+divider+fc.getSelectedFile().getName();
+        }
+        else if (rVal == JFileChooser.CANCEL_OPTION) {
+            //JOptionPane.showMessageDialog(this, "mysqldump not found, exiting");
+            return;
+        }        
+        
+        try {        
+
+            String command;
+            Runtime rt;
+            Process pr;
+            int exitVal;
+            
+            //--------------------drop database---------------------
+            // mysql -uroot -ppassword -e "drop database clix;" 
+            command=mysqlfilename+" -u"+username+" -p"+password+" -e \"drop database "+database+"\"";
+            rt = Runtime.getRuntime();
+            pr = rt.exec(command);
+            exitVal = pr.waitFor();
+            if(exitVal!=0)
+            {
+                JOptionPane.showMessageDialog(this, "Exited with error code "+exitVal);
+                System.exit(exitVal);
+            }
+            
+            //--------------------recreate database---------------------
+            //mysql -uroot -ppassword -e "create database clix;"
+            command=mysqlfilename+" -u"+username+" -p"+password+" -e \"create database "+database+"\"";
+            rt = Runtime.getRuntime();
+            pr = rt.exec(command);
+            exitVal = pr.waitFor();
+            if(exitVal!=0)
+            {
+                JOptionPane.showMessageDialog(this, "Exited with error code "+exitVal);
+                System.exit(exitVal);
+            }
+            
+            //--------------------load database from backup file---------------------
+            //mysql -uroot -ppassword clix < ~/tmcbackup-2014-02-13.sql 
+            command=mysqlfilename+" -u"+username+" -p"+password+" "+database+" < "+loadfilename;
+            //System.out.println(command);
+            rt = Runtime.getRuntime();
+            pr = rt.exec(command);
+            exitVal = pr.waitFor();
+            if(exitVal!=0)
+            {
+                JOptionPane.showMessageDialog(this, "Exited with error code "+exitVal);
+                System.exit(exitVal);
+            }
+
+            command=mysqlfilename+" -u"+username+" -p"+password+" "+database;
+            //System.out.println(command);
+            rt = Runtime.getRuntime();
+            pr = rt.exec(command);
+            exitVal = pr.waitFor();
+ 
+            System.out.println("Exited with error code "+exitVal);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(FrmMain.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(FrmMain.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_btnLoadActionPerformed
+
+    private void btnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExitActionPerformed
+        System.exit(0);
+    }//GEN-LAST:event_btnExitActionPerformed
 
     /**
      * @param args the command line arguments
@@ -276,9 +393,14 @@ public class FrmMain extends javax.swing.JFrame {
         }
     
     }
-    
+    private String getMysqlFile()
+    {
+        return txtMysqldump.getText().replace("dump", "");
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBackup;
+    private javax.swing.JButton btnExit;
+    private javax.swing.JButton btnLoad;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JTextField txtMysqldump;
