@@ -10,7 +10,6 @@ import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import utils.fileaccess.FileReader;
@@ -26,14 +25,14 @@ import utils.fileaccess.FileWriter;
  * @author jaspertomas
  */
 public class FrmMain extends javax.swing.JFrame {
-    //*
+    /*
     //for prod
     String divider="\\";
     String username="root";
     String password="happiness";
     String database="tmcprogram3";
     //*/
-    /*
+    //*
     //for dev
     String divider="/";
     String username="root";
@@ -46,6 +45,8 @@ public class FrmMain extends javax.swing.JFrame {
      */
     public FrmMain() {
         initComponents();
+        
+        lblPleaseWait.setVisible(false);
         
         //check if settings file exists
         File settingsfile=new File("."+divider+"mysqlbinpath.txt");
@@ -96,6 +97,9 @@ public class FrmMain extends javax.swing.JFrame {
         btnBackup = new javax.swing.JButton();
         btnLoad = new javax.swing.JButton();
         btnExit = new javax.swing.JButton();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        lblPleaseWait = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -133,6 +137,16 @@ public class FrmMain extends javax.swing.JFrame {
             }
         });
 
+        jLabel3.setFont(new java.awt.Font("Lucida Grande", 0, 24)); // NOI18N
+        jLabel3.setText("TMC Program ");
+
+        jLabel4.setFont(new java.awt.Font("Lucida Grande", 0, 14)); // NOI18N
+        jLabel4.setText("Windows Version");
+
+        lblPleaseWait.setFont(new java.awt.Font("Lucida Grande", 1, 24)); // NOI18N
+        lblPleaseWait.setForeground(new java.awt.Color(0, 255, 0));
+        lblPleaseWait.setText("PLEASE WAIT");
+
         org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -141,14 +155,7 @@ public class FrmMain extends javax.swing.JFrame {
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                     .add(layout.createSequentialGroup()
                         .addContainerGap()
-                        .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                            .add(txtMysqldump, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 345, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                            .add(layout.createSequentialGroup()
-                                .add(83, 83, 83)
-                                .add(jLabel2))))
-                    .add(layout.createSequentialGroup()
-                        .add(56, 56, 56)
-                        .add(jLabel1))
+                        .add(txtMysqldump, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 345, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
                     .add(layout.createSequentialGroup()
                         .add(85, 85, 85)
                         .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING, false)
@@ -156,15 +163,37 @@ public class FrmMain extends javax.swing.JFrame {
                             .add(btnLoad, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                     .add(layout.createSequentialGroup()
                         .add(109, 109, 109)
-                        .add(btnExit, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 115, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
+                        .add(btnExit, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 115, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                    .add(layout.createSequentialGroup()
+                        .add(92, 92, 92)
+                        .add(jLabel3))
+                    .add(layout.createSequentialGroup()
+                        .add(119, 119, 119)
+                        .add(jLabel4)))
                 .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(jLabel1)
+                    .add(layout.createSequentialGroup()
+                        .add(48, 48, 48)
+                        .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                            .add(jLabel2)
+                            .add(lblPleaseWait))))
+                .add(48, 48, 48))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(layout.createSequentialGroup()
+            .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
+                .add(jLabel3)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jLabel1)
-                .add(42, 42, 42)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jLabel4)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
+                .add(lblPleaseWait)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 22, Short.MAX_VALUE)
                 .add(jLabel2)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(txtMysqldump, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
@@ -174,7 +203,7 @@ public class FrmMain extends javax.swing.JFrame {
                 .add(btnLoad, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 46, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .add(12, 12, 12)
                 .add(btnExit, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 46, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(38, Short.MAX_VALUE))
+                .add(23, 23, 23))
         );
 
         pack();
@@ -186,6 +215,7 @@ public class FrmMain extends javax.swing.JFrame {
 //            JOptionPane.showMessageDialog(this, "Save database backup as ...");
 //            return;
 //        }
+        pleaseWait(true);
         
         String mysqldebugfilename=txtMysqldump.getText();
 
@@ -219,7 +249,7 @@ public class FrmMain extends javax.swing.JFrame {
             String line=null;
 
             try {
-                PrintWriter out = new PrintWriter(new BufferedWriter(new java.io.FileWriter(backupfilename, true)));
+                PrintWriter out = new PrintWriter(new BufferedWriter(new java.io.FileWriter(backupfilename, false)));
                 while((line=input.readLine()) != null) {
                     //System.out.println(line);
 //                    backupcontent+=line;
@@ -238,11 +268,15 @@ public class FrmMain extends javax.swing.JFrame {
 
             int exitVal = pr.waitFor();
             System.out.println("Exited with error code "+exitVal);
+            
+            JOptionPane.showMessageDialog(this, "Database dump successfully saved as "+backupfilename);
+            
         } catch (InterruptedException ex) {
-            Logger.getLogger(FrmMain.class.getName()).log(Level.SEVERE, null, ex);
+            ex.printStackTrace();
         } catch (IOException ex) {
-            Logger.getLogger(FrmMain.class.getName()).log(Level.SEVERE, null, ex);
+            ex.printStackTrace();
         }
+        pleaseWait(false);
     }//GEN-LAST:event_btnBackupActionPerformed
 
     private void txtMysqldumpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtMysqldumpActionPerformed
@@ -358,10 +392,11 @@ public class FrmMain extends javax.swing.JFrame {
  
             System.out.println("Exited with error code "+exitVal);
         } catch (InterruptedException ex) {
-            Logger.getLogger(FrmMain.class.getName()).log(Level.SEVERE, null, ex);
+            ex.printStackTrace();
         } catch (IOException ex) {
-            Logger.getLogger(FrmMain.class.getName()).log(Level.SEVERE, null, ex);
+            ex.printStackTrace();
         }
+        pleaseWait(false);
     }//GEN-LAST:event_btnLoadActionPerformed
 
     private void btnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExitActionPerformed
@@ -385,13 +420,13 @@ public class FrmMain extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(FrmMain.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            ex.printStackTrace();
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(FrmMain.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            ex.printStackTrace();
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(FrmMain.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            ex.printStackTrace();
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(FrmMain.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            ex.printStackTrace();
         }
         //</editor-fold>
 
@@ -432,12 +467,24 @@ public class FrmMain extends javax.swing.JFrame {
     {
         return txtMysqldump.getText().replace("dump", "");
     }
+    
+    private void pleaseWait(boolean wait)
+    {
+        btnExit.setEnabled(!wait);
+        btnLoad.setEnabled(!wait);
+        btnBackup.setEnabled(!wait);
+        lblPleaseWait.setVisible(wait);
+
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBackup;
     private javax.swing.JButton btnExit;
     private javax.swing.JButton btnLoad;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel lblPleaseWait;
     private javax.swing.JTextField txtMysqldump;
     // End of variables declaration//GEN-END:variables
 }
