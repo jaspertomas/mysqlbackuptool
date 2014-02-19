@@ -25,14 +25,14 @@ import utils.fileaccess.FileWriter;
  * @author jaspertomas
  */
 public class FrmMain extends javax.swing.JFrame {
-    /*
+    //*
     //for prod
     String divider="\\";
     String username="root";
     String password="happiness";
     String database="tmcprogram3";
     //*/
-    //*
+    /*
     //for dev
     String divider="/";
     String username="root";
@@ -284,6 +284,9 @@ public class FrmMain extends javax.swing.JFrame {
     }//GEN-LAST:event_txtMysqldumpActionPerformed
 
     private void btnLoadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoadActionPerformed
+
+        pleaseWait(true);
+        
         String mysqlfilename=getMysqlFile();
         String mysqldumpfilename=txtMysqldump.getText();
 
@@ -348,7 +351,7 @@ public class FrmMain extends javax.swing.JFrame {
             exitVal = pr.waitFor();
             if(exitVal!=0)
             {
-                JOptionPane.showMessageDialog(this, "1 Exited with error code "+exitVal);
+                //JOptionPane.showMessageDialog(this, "1 Exited with error code "+exitVal);
                 //System.exit(exitVal);
             }
             
@@ -393,8 +396,10 @@ public class FrmMain extends javax.swing.JFrame {
             System.out.println("Exited with error code "+exitVal);
         } catch (InterruptedException ex) {
             ex.printStackTrace();
+            JOptionPane.showMessageDialog(this, "An error has occured");
         } catch (IOException ex) {
             ex.printStackTrace();
+            JOptionPane.showMessageDialog(this, "An error has occured");
         }
         pleaseWait(false);
     }//GEN-LAST:event_btnLoadActionPerformed
