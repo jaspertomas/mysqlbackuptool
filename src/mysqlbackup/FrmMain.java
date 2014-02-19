@@ -25,20 +25,19 @@ import utils.fileaccess.FileWriter;
  * @author jaspertomas
  */
 public class FrmMain extends javax.swing.JFrame {
-    //*
+    /*
     //for prod
     String divider="\\";
     String username="root";
     String password="happiness";
     String database="tmcprogram3";
     //*/
-    /*
+    //*
     //for dev
     String divider="/";
     String username="root";
     String password="password";
-    String database="clix";
-    //String database="tmcprogram3";
+    String database="tmcprogram3";
     //*/ 
     /**
      * Creates new form FrmMain
@@ -114,7 +113,7 @@ public class FrmMain extends javax.swing.JFrame {
         jLabel1.setText("Database Backup Tool");
 
         jLabel2.setFont(new java.awt.Font("Lucida Grande", 0, 14)); // NOI18N
-        jLabel2.setText("Path to Mysql binary files:");
+        jLabel2.setText("Path to Mysqldebug file");
 
         btnBackup.setText("Save database as file");
         btnBackup.addActionListener(new java.awt.event.ActionListener() {
@@ -141,7 +140,7 @@ public class FrmMain extends javax.swing.JFrame {
         jLabel3.setText("TMC Program ");
 
         jLabel4.setFont(new java.awt.Font("Lucida Grande", 0, 14)); // NOI18N
-        jLabel4.setText("Windows Version");
+        jLabel4.setText("     Mac Version");
 
         lblPleaseWait.setFont(new java.awt.Font("Lucida Grande", 1, 24)); // NOI18N
         lblPleaseWait.setForeground(new java.awt.Color(0, 255, 0));
