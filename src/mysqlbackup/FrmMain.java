@@ -214,8 +214,6 @@ public class FrmMain extends javax.swing.JFrame {
 //            JOptionPane.showMessageDialog(this, "Save database backup as ...");
 //            return;
 //        }
-        pleaseWait(true);
-        
         String mysqldebugfilename=txtMysqldump.getText();
 
         //ask for output file
@@ -236,6 +234,8 @@ public class FrmMain extends javax.swing.JFrame {
             //JOptionPane.showMessageDialog(this, "mysqldump not found, exiting");
             return;
         }        
+        
+        pleaseWait(true);
         
         try {        
             String command=mysqldebugfilename+" --user="+username+" --password="+password+" "+database;
@@ -284,8 +284,6 @@ public class FrmMain extends javax.swing.JFrame {
 
     private void btnLoadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoadActionPerformed
 
-        pleaseWait(true);
-        
         String mysqlfilename=getMysqlFile();
         String mysqldumpfilename=txtMysqldump.getText();
 
@@ -307,6 +305,8 @@ public class FrmMain extends javax.swing.JFrame {
             //JOptionPane.showMessageDialog(this, "mysqldump not found, exiting");
             return;
         }        
+        
+        pleaseWait(true);
         
         try {        
 
